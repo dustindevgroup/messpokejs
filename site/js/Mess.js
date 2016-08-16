@@ -6,8 +6,8 @@ var Mess = {
 	},
 
 	askLoginGoogle : function () {
-		var user = prompt('user');
-		var pass = prompt('password');
+		var user = window.userConfig.username;
+		var pass = window.userConfig.password;
 
 		Mess.Requests.loginGoogle( user, pass, this._location, function () {
 			console.log( 'loginGoogle ', arguments );

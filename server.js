@@ -49,7 +49,18 @@ apiRouter.route('/login')
 				return;
 			}
 
-			resUtils.sendSuccess(res, data);
+			console.log('login data = ', data);
+
+			pokebo.getProfile( function ( error, profile ) {
+				if ( error ) {
+					console.log(error);
+					resUtils.sendError(res, {message : 'error'});
+					return;
+				}
+
+				resUtils.sendSuccess(res, profile);
+			} );
+
 		});
 	});
 

@@ -5,26 +5,41 @@ Mess.Requests = {
 	_request : function ( url, method, dataJson, callback) {
 		$.ajax({
 			type: method,
-			url: url,
+			url: this._baseUrl + url,
+			contentType : 'application/json',
 			dataType: 'json',
-			data: dataJson,
-			success: function () {
-				callback.apply(arguments);
+			data: JSON.stringify( dataJson ),
+			success: function ( response ) {
+				if ( response.error ) {
+					callback( response.error );
+					return;
+				}
+				callback( null, response.data );
 			},
-			error : function () {
-				callback.apply(arguments);
+			error : function (response) {
+				callback( response );
 			}
 		});
 	},
 
-	loginGoogle : function (user, pass, callback) {
-		console.log('loginGoogle baseurl = ', this._baseUrl );
-		var url = this._baseUrl + 'login';
-		this._request(url, 'POST', {
+	testError : function () {
+		this._request('error', 'POST', { test : '123' }, function (error, data) {
+			console.log( 'testError error = ', error );
+			console.log( 'testError data = ', data );
+		});
+	},
+
+	loginGoogle : function (user, pass, location, callback) {
+		this._request('login', 'POST', {
 			username : user,
 			password : pass,
-			type : 'google'
+			type : 'google',
+			location : location
 		}, callback );
+	},
+
+	getProfile : function (callback) {
+		this._request('login', 'POST', {}, callback );
 	}
 
 };

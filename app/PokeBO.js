@@ -13,28 +13,27 @@ var PokeBO = {
 		}
 	},
 
-	login : function( username, password, provider, callback ) {
-		Pokeio.init(username, password, location, provider, callback);
+	login : function( username, password, provider, location, callback ) {
+		this._state.location.coords = location;
+		Pokeio.init(username, password, this._state.location, provider, callback);
 	},
 
 	setLocation : function ( location, callback ) {
 		location.altitude = location.altitude ? location.altitude : 1;
-		this._state.location = location;
+		this._state.location.coords = location;
+
 		console.log('PokeBO.getLocation = ', this._state.location);
 
-		Pokeio.SetLocation(location, function (err, coordinates) {
-			if ( err ) {
-				callback( err );
-				return;
-			}
-
-			callback(null, coordinates);
-		});
+		Pokeio.SetLocation(location, callback);
 	},
 
 	getLocation : function () {
 		console.log('PokeBO.getLocation = ', this._state.location);
 		return this._state.location;
+	},
+
+	getProfile : function (callback) {
+		Pokeio.GetProfile(callback);
 	}
 
 };
